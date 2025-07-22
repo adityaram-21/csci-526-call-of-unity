@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class ClueMapping
 {
     public string objectName;
-    public string objectTagName;
-    public List<string> cluesWordList;
+    //public string objectTagName;
+    public List<string> clueWords;
 }
 
 [System.Serializable]
@@ -23,8 +23,6 @@ public class ClueMappings
 
 public class WordDictionaryManager : MonoBehaviour
 {
-    public TextAsset clueJsonFile;
-
     [HideInInspector]
     public ClueMappings clueMappings;
 
@@ -34,7 +32,13 @@ public class WordDictionaryManager : MonoBehaviour
 
     void Awake()
     {
+        TextAsset clueJsonFile = Resources.Load<TextAsset>("Clues/clues");
         // Load the clue mappings from the JSON file
+        if (clueJsonFile == null)
+        {
+            Debug.LogError("clues.json not found in Resources/Clues folder! Check your path.");
+            return;
+        }
         clueMappings = JsonUtility.FromJson<ClueMappings>(clueJsonFile.text);
     }
 
@@ -52,23 +56,25 @@ public class WordDictionaryManager : MonoBehaviour
 
         // Set the target object name, tag name, and clue word
         targetObjectName = selectedObjectMapping.objectName;
-        targetObjectTagName = selectedObjectMapping.objectTagName;
+        //targetObjectTagName = selectedObjectMapping.objectTagName;
 
-        if (selectedObjectMapping.cluesWordList.Count > 0)
+        if (selectedObjectMapping.clueWords.Count > 0)
         {
-            int randomClueIndex = Random.Range(0, selectedObjectMapping.cluesWordList.Count);
-            targetClueWord = selectedObjectMapping.cluesWordList[randomClueIndex].ToUpper();
+            int randomClueIndex = Random.Range(0, selectedObjectMapping.clueWords.Count);
+            targetClueWord = selectedObjectMapping.clueWords[randomClueIndex].ToUpper();
         }
         else
         {
             targetClueWord = null;
             Debug.LogError($"Object {selectedObjectMapping.objectName} has no clue words! Check your JSON.");
         }
+
+        Debug.Log($"Selected clue: {targetClueWord} for object: {targetObjectName}");
     }
 
-    public bool IsClueWordValid(string playerWord, out string targetTag, out string targetName)
+    public bool ValidateClueWord(string playerWord,out string targetName) //out string targetTag, )
     {
-        targetTag = this.targetObjectTagName;
+        //targetTag = this.targetObjectTagName;
         targetName = this.targetObjectName;
 
         if (string.IsNullOrEmpty(targetClueWord))
