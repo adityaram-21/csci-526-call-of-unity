@@ -15,6 +15,9 @@ public class PlayerController : MonoBehaviour
     public GameObject flashlight;
     private bool flashlightOn = false;
     
+    // distance check, use for interaction
+    public float maxInteractDistance = 3f;
+    
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -39,20 +42,43 @@ public class PlayerController : MonoBehaviour
         Vector2 dir = (mouseWorld - transform.position);
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90f; // direction
         rb.rotation = angle;
-
+        
+        
         // Flashlight Switch
         if (Input.GetMouseButtonDown(1)) // Right Click
         {
             flashlightOn = !flashlightOn;
             if (flashlight != null)
+            {
                 flashlight.SetActive(flashlightOn);
+            }
+                
         }
 
-        // interaction click... 
+        // interaction click, left click
         if (Input.GetMouseButtonDown(0))
-        {
-            // logic
-            Debug.Log("Left click: interact (function under dev)");
+        { 
+            // Convert the mouse position from screen coordinates to world coordinates
+            Vector2 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+            // Send out a ray, the direction is Vector2.zero, means only the position of this point is detected
+            RaycastHit2D hit = Physics2D.Raycast(mouseWorldPos, Vector2.zero);
+                
+            if (hit.collider != null)
+            {
+                //check distance
+                float distance = Vector2.Distance(transform.position, hit.point);
+                
+                if (distance <= maxInteractDistance)
+                {
+                    // try to get InteractiveObject
+                    CommonInteractive interactive = hit.collider.GetComponent<CommonInteractive>();
+                    if (interactive != null)
+                    {
+                        interactive.Interact();
+                    }
+                }
+            }
         }
     }
     
