@@ -282,3 +282,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   letterValue: 0
   letterText: {fileID: 2048013390739867552}
+  isCollected: 0
+  collectRange: 3
