@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using Mono.Cecil.Cil;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,10 +27,13 @@ public class WordDictionaryManager : MonoBehaviour
 {
     [HideInInspector]
     public ClueMappings clueMappings;
+    public CipherManager cipherManager;
+    public TMP_Text clueText;
 
     public string targetObjectName { get; private set; }
     public string targetObjectTagName { get; private set; }
     public string targetClueWord { get; private set; }
+    public string cipherWord { get; private set; }
 
     void Awake()
     {
@@ -40,6 +45,8 @@ public class WordDictionaryManager : MonoBehaviour
             return;
         }
         clueMappings = JsonUtility.FromJson<ClueMappings>(clueJsonFile.text);
+
+        cipherManager = GetComponent<CipherManager>();
     }
 
     public void SelectRandomClue()
@@ -62,14 +69,19 @@ public class WordDictionaryManager : MonoBehaviour
         {
             int randomClueIndex = Random.Range(0, selectedObjectMapping.clueWords.Count);
             targetClueWord = selectedObjectMapping.clueWords[randomClueIndex].ToUpper();
+            cipherWord = cipherManager.EncodeWord(targetClueWord);
         }
         else
         {
             targetClueWord = null;
+            cipherWord = null;
             Debug.LogError($"Object {selectedObjectMapping.objectName} has no clue words! Check your JSON.");
         }
 
+        clueText.text = $"Code Word: {cipherWord ?? "No clue available"}";
+
         Debug.Log($"Selected clue: {targetClueWord} for object: {targetObjectName}");
+        Debug.Log($"Ciphered clue: {cipherWord}");
     }
 
     public bool ValidateClueWord(string playerWord,out string targetName) //out string targetTag, )
