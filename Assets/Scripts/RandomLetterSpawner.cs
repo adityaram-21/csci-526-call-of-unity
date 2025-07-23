@@ -39,7 +39,6 @@ public class RandomLetterSpawner : MonoBehaviour
         GenerateValidSpawnPoints();
 
         wordDictionaryManager.SelectRandomClue();  // Pick a clue for this level
-
         SpawnLettersForClue();
     }
 

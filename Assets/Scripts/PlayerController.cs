@@ -45,14 +45,13 @@ public class PlayerController : MonoBehaviour
         
         
         // Flashlight Switch
-        if (Input.GetMouseButtonDown(1)) // Right Click
+        if (Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.Space)) // Right click or Space
         {
             flashlightOn = !flashlightOn;
             if (flashlight != null)
             {
                 flashlight.SetActive(flashlightOn);
-            }
-                
+            }    
         }
 
         // interaction click, left click
