@@ -6,8 +6,6 @@ using System.Linq;
 public class CipherUIManager : MonoBehaviour
 {
     public CipherManager cipherManager;
-    public string currentWord = "BOOK";
-
     public TextMeshProUGUI codewordText;
     public Button showMappingButton;
     public GameObject mappingPanel;
@@ -18,9 +16,6 @@ public class CipherUIManager : MonoBehaviour
 
     void Start()
     {
-        string encoded = cipherManager.EncodeWord(currentWord);
-        codewordText.text = "CODEWORD: " + encoded;
-
         mappingPanel.SetActive(false);
         showMappingButton.onClick.AddListener(ToggleMappingPanel);
 
