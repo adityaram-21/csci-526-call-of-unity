@@ -1,18 +1,7 @@
 {
-  "clueMappingsList": [
-    { "objectName": "Bed", "clueWords": ["DREAM", "REST", "BLANKET"] },
-    { "objectName": "Shoe", "clueWords": ["FOOT", "JOURNEY", "SOLE"] },
-    { "objectName": "Sink", "clueWords": ["RINSE", "DRAIN", "FAUCET"] },
-    { "objectName": "Tub", "clueWords": ["SOAK", "BATH", "STEAM"] },
-    { "objectName": "Lamp", "clueWords": ["GLOW", "SHADE", "LIGHT"] },
-    { "objectName": "Sofa", "clueWords": ["FURNITURE", "CUSHION", "ARMREST"] },
-    { "objectName": "Clock", "clueWords": ["TICK", "TIME", "HOURS"] },
-    { "objectName": "Fridge", "clueWords": ["FRUITS", "ICE", "PIZZA"] },
-    { "objectName": "Drawer", "clueWords": ["HIDE", "SECRET", "STASH"] },
-    { "objectName": "TV", "clueWords": ["SCREEN", "BROADCAST", "REMOTE"] },
-    { "objectName": "Cabinet", "clueWords": ["STORE", "WOOD", "PANEL"] },
-    { "objectName": "Pantry", "clueWords": ["SUPPLY", "SHELF", "STOCK"] },
-    { "objectName": "Bookshelf", "clueWords": ["READ", "BOOK", "NOTES"] },
-    { "objectName": "Desk", "clueWords": ["WORK", "STUDY", "PAPER"] }
-  ]
-}
+    "clueMappingsList": [
+      { "objectName": "Bed", "clueWords": ["DREAM", "REST", "BLANKET"] },
+      { "objectName": "Tub", "clueWords": ["SOAK", "BATH", "STEAM"] },
+      { "objectName": "Lamp", "clueWords": ["GLOW", "SHADE", "LIGHT"] }
+    ]
+  }

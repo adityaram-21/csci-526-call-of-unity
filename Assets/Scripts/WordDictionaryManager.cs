@@ -35,18 +35,26 @@ public class WordDictionaryManager : MonoBehaviour
     public string cipherWord { get; private set; }
 
     void Awake()
+{
+    TextAsset clueJsonFile = Resources.Load<TextAsset>("Clues/clues");
+    if (clueJsonFile == null)
     {
-        TextAsset clueJsonFile = Resources.Load<TextAsset>("Clues/clues");
-        // Load the clue mappings from the JSON file
-        if (clueJsonFile == null)
-        {
-            Debug.LogError("clues.json not found in Resources/Clues folder! Check your path.");
-            return;
-        }
-        clueMappings = JsonUtility.FromJson<ClueMappings>(clueJsonFile.text);
-
-        cipherManager = GetComponent<CipherManager>();
+        Debug.LogError("clues.json not found in Resources/Clues folder! Check your path.");
+        return;
     }
+    clueMappings = JsonUtility.FromJson<ClueMappings>(clueJsonFile.text);
+    Debug.Log("Clues JSON loaded:\n" + clueJsonFile.text);
+
+    cipherManager = GetComponent<CipherManager>();
+}
+
+// ✅ Move this to Start
+void Start()
+{
+    SelectRandomClue();
+}
+
+ 
 
     public void SelectRandomClue()
     {
