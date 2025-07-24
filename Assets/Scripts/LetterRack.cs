@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -5,13 +6,17 @@ using TMPro;
 public class LetterRack : MonoBehaviour
 {
     [SerializeField] private RectTransform slotTemplate;
-    private List<Slot> slots = new();
+    [SerializeField] private GameObject successPopup;
 
+    private List<Slot> slots = new();
     public WordDictionaryManager wordManager;
     private string clueWord;
+    public static bool clueSolved = false;
 
     private void Start()
     {
+        clueSolved = false;
+
         if (wordManager == null)
         {
             wordManager = FindObjectOfType<WordDictionaryManager>();
@@ -42,10 +47,7 @@ public class LetterRack : MonoBehaviour
 
             int slotIndex = i;
             var button = slot.gameObject.AddComponent<UnityEngine.UI.Button>();
-            button.onClick.AddListener(() => {
-                PopLetter(slotIndex);
-                TryCheckConstructedWord();
-            });
+            button.onClick.AddListener(() => PopLetter(slotIndex));
 
             var drag = slot.gameObject.AddComponent<DraggableSlot>();
             drag.slotIndex = slotIndex;
@@ -56,7 +58,7 @@ public class LetterRack : MonoBehaviour
     public void SetLetter(int i, char c, Letter source = null)
     {
         slots[i].Set(c, source);
-        TryCheckConstructedWord();
+        CheckWord();
     }
 
     public bool AddCollectedLetter(char c, Letter source)
@@ -66,7 +68,7 @@ public class LetterRack : MonoBehaviour
             if (slots[i].Letter == '\0')
             {
                 slots[i].Set(c, source);
-                TryCheckConstructedWord();
+                CheckWord();
                 return true;
             }
         }
@@ -96,16 +98,18 @@ public class LetterRack : MonoBehaviour
 
             slots[i].Set(slots[j].Letter, slots[j].Source);
             slots[j].Set(tempLetter, tempSource);
-
-            TryCheckConstructedWord();
+            CheckWord();
         }
     }
 
-    private string GetConstructedWord()
+    private void CheckWord()
     {
+        if (clueSolved) return;
+
         foreach (var slot in slots)
         {
-            if (slot.Letter == '\0') return null;
+            if (slot.Letter == '\0')
+                return;
         }
 
         string constructedWord = "";
@@ -113,23 +117,19 @@ public class LetterRack : MonoBehaviour
         {
             constructedWord += slot.Letter;
         }
-        return constructedWord;
+
+        if (constructedWord.ToUpper() == clueWord.ToUpper())
+        {
+            clueSolved = true;
+            StartCoroutine(ShowPopup(successPopup));
+        }
     }
 
-    private void TryCheckConstructedWord()
+    private IEnumerator ShowPopup(GameObject popup)
     {
-        string constructed = GetConstructedWord();
-        if (constructed != null)
-        {
-            if (wordManager.ValidateClueWord(constructed, out string targetName))
-            {
-                Debug.Log($"✅ Correct! Word: {constructed} matches the clue for {targetName}");
-            }
-            else
-            {
-                Debug.Log($"❌ Incorrect! Word: {constructed} does not match the clue.");
-            }
-        }
+        popup.SetActive(true);
+        yield return new WaitForSeconds(1f);
+        popup.SetActive(false);
     }
 
     private class Slot
