@@ -1286,14 +1286,13 @@ GameObject:
   m_Component:
   - component: {fileID: 335648244}
   - component: {fileID: 335648243}
-  - component: {fileID: 335648245}
   m_Layer: 0
   m_Name: FlashLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &335648243
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1361,31 +1360,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1218499392}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &335648245
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 335648242}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd99fe065249aa54d85707f9c539cb57, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  innerAngle: 60
-  outerAngle: 120
-  strongLightDistance: 4
-  weakLightDistance: 2
-  rayCount: 30
-  detectionLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  visibleLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  drawGizmos: 1
-  alarmLogText: {fileID: 175419441}
 --- !u!1 &346231774
 GameObject:
   m_ObjectHideFlags: 0
@@ -2564,6 +2538,7 @@ GameObject:
   - component: {fileID: 1218499390}
   - component: {fileID: 1218499389}
   - component: {fileID: 1218499393}
+  - component: {fileID: 1218499394}
   m_Layer: 0
   m_Name: ThePlayer
   m_TagString: Player
@@ -2711,14 +2686,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1218499388}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
+  m_LocalPosition: {x: -6.49, y: 3.55, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 335648244}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
 --- !u!114 &1218499393
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2735,6 +2710,32 @@ MonoBehaviour:
   mainCamera: {fileID: 1363416515}
   flashlight: {fileID: 335648242}
   maxInteractDistance: 1
+--- !u!114 &1218499394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1218499388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd99fe065249aa54d85707f9c539cb57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  innerAngle: 60
+  outerAngle: 120
+  strongLightDistance: 3
+  weakLightDistance: 2
+  rayCount: 30
+  detectionLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  visibleLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  drawGizmos: 1
+  flashlight: {fileID: 335648242}
+  alarmLogText: {fileID: 175419441}
 --- !u!1 &1240203551
 GameObject:
   m_ObjectHideFlags: 0

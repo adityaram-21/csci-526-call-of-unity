@@ -1,35 +1,37 @@
 using UnityEngine;
-using TMPro;
+using TMPro; 
+
 
 public class FlashlightDetector : MonoBehaviour
 {
     [Header("Light Angles")]
     [Range(0f, 180f)]
-    public float innerAngle = 30f; // Strong light cone (center area)
+    public float innerAngle = 30f; // inner cone for strong light
     [Range(0f, 180f)]
-    public float outerAngle = 60f; // Full light cone (including weak light)
+    public float outerAngle = 60f; // full cone including weak light
 
     [Header("Detection Distances")]
-    public float strongLightDistance = 5f; // Max distance for strong light (triggers alarm)
-    public float weakLightDistance = 8f;   // Max distance for weak light (just visible)
+    public float strongLightDistance = 5f; // max distance for strong light
+    public float weakLightDistance = 8f; // max distance for weak light
 
     [Header("Ray Settings")]
-    public int rayCount = 30; // Number of rays we cast
-    public LayerMask detectionLayer; // Things that trigger alarm
-    public LayerMask visibleLayer; // Things visible in weak light
+    public int rayCount = 30; // how many rays to cast
+    public LayerMask detectionLayer; // layer to trigger alarm
+    public LayerMask visibleLayer; // layer just visible in weak light
 
     [Header("Debug")]
-    public bool drawGizmos = true; // Show gizmos in Scene view
+    public bool drawGizmos = true; // show gizmos in Scene view
 
-    [Header("UI Reference")]
-    public TextMeshProUGUI alarmLogText; // Drag your AlarmLog TextMeshProUGUI here
+    [Header("References")]
+    public GameObject flashlight; // assign Light2D here
+    public TextMeshProUGUI alarmLogText; // assign your AlarmLog TextMeshProUGUI here
 
-    // Private states
-    private bool isAlarmOn = false; // Whether alarm is currently active
+    // private state
+    private bool isAlarmOn = false;
 
     void Start()
     {
-        // make sure the UI is hidden at start
+        // hide alarm text at start
         if (alarmLogText != null)
         {
             alarmLogText.enabled = false;
@@ -43,8 +45,19 @@ public class FlashlightDetector : MonoBehaviour
 
     private void DetectLight()
     {
+        // if flashlight is off, stop checking
+        if (flashlight == null || !flashlight.activeInHierarchy)
+        {
+            if (isAlarmOn)
+            {
+                isAlarmOn = false;
+                StopAlarm();
+            }
+            return;
+        }
+
         Vector2 origin = transform.position;
-        Vector2 forward = transform.up; // change to transform.right if needed
+        Vector2 forward = transform.up; // adjust if flashlight direction is different
 
         float halfOuter = outerAngle / 2f;
         float step = outerAngle / (rayCount - 1);
@@ -57,7 +70,7 @@ public class FlashlightDetector : MonoBehaviour
             Vector2 dir = Quaternion.Euler(0, 0, angleOffset) * forward;
             float absAngle = Mathf.Abs(angleOffset);
 
-            // --- Strong light area ---
+            // Strong light area
             if (absAngle <= innerAngle / 2f)
             {
                 RaycastHit2D hit = Physics2D.Raycast(origin, dir, strongLightDistance, detectionLayer);
@@ -65,7 +78,7 @@ public class FlashlightDetector : MonoBehaviour
                 {
                     alarmTriggeredThisFrame = true;
 
-                    if (!isAlarmOn) // only trigger once when entering alarm state
+                    if (!isAlarmOn)
                     {
                         isAlarmOn = true;
                         TriggerAlarm(hit.collider.gameObject);
@@ -83,7 +96,7 @@ public class FlashlightDetector : MonoBehaviour
             }
         }
 
-        // If no alarm triggered this frame but alarm was on before, turn it off 
+        // no alarm this frame but was on last frame, turn off
         if (!alarmTriggeredThisFrame && isAlarmOn)
         {
             isAlarmOn = false;
@@ -97,7 +110,7 @@ public class FlashlightDetector : MonoBehaviour
 
         if (alarmLogText != null)
         {
-            alarmLogText.text = " Flashlight Detected!";
+            alarmLogText.text = "Flashlight Detected!";
             alarmLogText.enabled = true;
         }
     }
@@ -114,11 +127,11 @@ public class FlashlightDetector : MonoBehaviour
 
     private void OnWeakLightVisible(GameObject visibleObject)
     {
-        // Optional logic
+        // optional
         // Debug.Log("Weak light sees: " + visibleObject.name);
     }
 
-    // Debug only
+    // debug only
     private void OnDrawGizmosSelected()
     {
         if (!drawGizmos) return;
@@ -126,11 +139,11 @@ public class FlashlightDetector : MonoBehaviour
         Vector2 origin = transform.position;
         Vector2 forward = transform.up;
 
-        // Strong light cone
+        // strong light cone
         Gizmos.color = new Color(1f, 0f, 0f, 0.3f);
         DrawSector(origin, forward, innerAngle, strongLightDistance);
 
-        // Weak light cone
+        // weak light cone
         Gizmos.color = new Color(1f, 1f, 0f, 0.15f);
         DrawSector(origin, forward, outerAngle, weakLightDistance);
     }
